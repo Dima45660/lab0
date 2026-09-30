@@ -1,17 +1,9 @@
 #!/bin/bash
 
 
-set -uo pipefail
-
-#чтобы работало и с русскими буквами
-export LC_ALL=C.UTF-8
-
-BASE="lab0_script"
-
-#чистим старую версию на слчай повторного запуска 
-rm -rf "$BASE"
-mkdir -p "$BASE"
-cd "$BASE" || exit 1
+rm -rf lab0_script
+mkdir lab0_script
+cd lab0_script
 
 mkdir -p claude_monet/bar
 mkdir -p claude_monet/hall
@@ -93,20 +85,27 @@ cat > claude_monet/wine_cellar/inventory << 'EOF'
 EOF
 
 
-echo "2. Установка прав доступа"
 
 chmod 755 claude_monet
+chmod 750 claude_monet/bar
 chmod 644 claude_monet/bar/cocktail_menu
+chmod 640 claude_monet/bar/evening_orders
 chmod 750 claude_monet/wine_cellar
+chmod 660 claude_monet/wine_cellar/inventory
 chmod 640 claude_monet/wine_cellar/nagiev_wine
+chmod 750 claude_monet/storage
+chmod 644 claude_monet/storage/supplier_note
 chmod 755 claude_monet/hall
 chmod 664 claude_monet/hall/reservations
+chmod 444 claude_monet/hall/nastya_note
+chmod 750 claude_monet/office
 chmod 640 claude_monet/office/vika_schedule
 chmod 750 kostya_room
+chmod 440 kostya_room/kostya_diary
 chmod 700 empty_crates
+chmod 644 bar_message
 
 
-echo "3. Копирование, перемещение и создание ссылок"
 
 # 1. Копировать файл в другой каталог с новым именем
 cp kostya_room/kostya_diary claude_monet/office/bartender_report
@@ -133,7 +132,6 @@ cat claude_monet/storage/supplier_note >> claude_monet/wine_cellar/inventory
 mv claude_monet/wine_cellar/nagiev_wine claude_monet/office/special_wine
 
 
-echo "4. Поиск, фильтрация и обработка данных"
 
 # 4.1: топ-5 обычных файлов по размеру (без 'report')
 ls -laR . | grep '^-' | grep -v 'report' | sort -k5 -nr | head -n 5
@@ -153,12 +151,11 @@ grep -rl 'вино' claude_monet/wine_cellar claude_monet/storage/cellar_backup 
 grep -v 'послед' claude_monet/hall/service_plan | grep -iE 'гост|заказ' | sort -r | head -n4 | wc -w
 
 # 4.6: обычные файлы с 2 жёсткими ссылками, сортировка по inode
-ls -laiR . | awk '$2 ~ /^-/ && $3 == 2' | sort -k1,1n
+ls -laiR . | grep -E '^ *[0-9]+ -[^ ]+ +2 ' | sort -k1,1n
 
 # 4.7: символические ссылки, сортировка по имени (обратный алфавит), первая строка
 ls -laR . | grep '^l' | sort -k9 -r | head -n1
 
-echo "5. Удаление файлов, ссылок и каталогов"
 
 rm kostya_room/kostya_diary
 rm kostya_room/today_orders
