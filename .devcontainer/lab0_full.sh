@@ -84,7 +84,6 @@ chmod 700 empty_crates
 chmod 644 bar_message
 
 
-
 # 1. Копировать файл в другой каталог с новым именем
 cp kostya_room/kostya_diary claude_monet/office/bartender_report
 
