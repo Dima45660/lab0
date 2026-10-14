@@ -134,7 +134,7 @@ ls -laiR . | grep -E '^ *[0-9]+ -[^ ]+ +2 ' | sort -k1,1n
 ls -laR . | grep '^l' | sort -k9 -r | head -n1
 
 
-rm kostya_room/kostya_diary
+rm -f kostya_room/kostya_diary
 rm kostya_room/today_orders
 rm bar_entrance
 rm bar_message
